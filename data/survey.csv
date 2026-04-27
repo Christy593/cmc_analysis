@@ -1,0 +1,206 @@
+StartDate,EndDate,Status,IPAddress,Progress,Duration (in seconds),Finished,RecordedDate,ResponseId,RecipientLastName,RecipientFirstName,RecipientEmail,ExternalReference,LocationLatitude,LocationLongitude,DistributionChannel,UserLanguage,Q_RecaptchaScore,consent_form,participant_id,native_language,instructional_video,task1,task2,prob_understanding_1,prob_understanding_2,prob_understanding_3,prob_understanding_4,prob_understanding_5,prob_understanding_6,prob_understanding_7,prob_understanding_8,prob_understanding_9,idea_development_1,idea_development_2,idea_development_3,idea_development_4,idea_development_5,idea_development_6,idea_development_7,idea_development_8,idea_development_9,solution_evaluation_1,solution_evaluation_2,solution_evaluation_3,solution_evaluation_4,solution_evaluation_5,solution_evaluation_6,solution_evaluation_7,solution_evaluation_8,solution_evaluation_9,efficiency_1,efficiency_2,efficiency_3,efficiency_4,efficiency_5,efficiency_6,efficiency_7,efficiency_8,efficiency_9,agency_1,agency_2,agency_3,agency_4,agency_5,agency_6,agency_7,agency_8,agency_9,overall_preference,explanation,topic_familiarity_1,topic_familiarity_2,AI_frequency,use_of_AI,language_AI,freq_lang_switch,purpose_lang_switch_1,purpose_lang_switch_2,purpose_lang_switch_3,purpose_lang_switch_4,purpose_lang_switch_5,purpose_lang_switch_6,purpose_lang_switch_7,purpose_lang_switch_8,purpose_lang_switch_9,purpose_lang_switch_10,native_language,years_English,language_comfortable_1,language_comfortable_2,language_comfortable_3,language_comfortable_4,language_comfortable_5,age,age_9_TEXT,gender,major,additional_comments,Q_RecaptchaStatus,Q_RecaptchaError
+Start Date,End Date,Response Type,IP Address,Progress,Duration (in seconds),Finished,Recorded Date,Response ID,Recipient Last Name,Recipient First Name,Recipient Email,External Data Reference,Location Latitude,Location Longitude,Distribution Channel,User Language,Q_RecaptchaScore,"Project Title: Language Choice of Interaction in AI-Assisted Academic Writing
+
+Researchers Information: Tran Le (tnl22@cornell.edu), Richard Ballard (rpb233@cornell.edu), Anthony Ruiz (abr232@cornell.edu), Zhiqing Liu (zl2294@cornell.edu), Qi Lin (ql374@cornell.edu), and Yike Zou (yz3383@cornell.edu).
+
+Faculty Advisor Information: Susan Fussell (sfussell@cornell.edu)
+
+
+
+What the study is about 
+
+The purpose of this research is to examine how non-native English-speaking university students experience using an AI chatbot to generate ideas for academic writing. Specifically, this study compares participants’ experiences when interacting with the AI in their native language versus in English during the brainstorming and outlining stage of English problem-solution writing tasks. We aim to better understand how the language used to interact with AI may influence participants’ understanding of the problem, development and evaluation of solutions, perceived efficiency, cognitive load, agency during brainstorming, and overall usefulness and satisfaction with the interaction.
+
+
+
+Inclusion and exclusion criteria 
+
+Participants must:
+
+	Be 18 years of age or older.
+	Be currently enrolled as a Cornell University student.
+	Identify English as a non-native language.
+	Has one native language only, and it must be one of the following: Simplified Chinese, Traditional Chinese, Spanish, Korean, Vietnamese, or Hindi.
+	Be able to read academic content.
+	Have prior experience interacting with an AI web-based chatbot interface.
+
+Individuals who are under 18 years of age, identify English as their native language, report multiple native languages, report a native language that is not in the above list, are not currently enrolled as Cornell students, or decline to interact with the researcher-created chatbot tool will be excluded from participation.
+
+
+
+What we will ask you to do 
+
+If you agree to participate, you will complete two short problem-solution writing ideation tasks. For each task, you will use a locally deployed AI chatbot created by the researchers to generate and refine an outline for a problem-solution essay. Your outline will include a main claim, supporting arguments, and examples or evidence. You will not be required to write a full essay. You will complete one task using your native language to interact with the AI and create your outline, and one task using English.
+
+
+
+The order of these two language conditions, as well as the prompt assignment, will be randomly determined. After completing both tasks, you will answer questions comparing your experiences across the two language conditions. You will also complete a short background questionnaire about your language experience and AI usage habits. Your total participation time will be approximately 30-40 minutes.
+
+
+
+Risks and Discomforts
+
+We do not anticipate any risks from participating in this research.
+
+
+
+Benefits
+
+There are no direct benefits to you from participating in this research. However, some participants may find it interesting to reflect on their writing process and AI use habits across languages. The information gained from this study may help researchers better understand how bilingual non-native English-speaking students use AI tools in academic brainstorming and outlining. Findings from this research may contribute to future research and the development of educational technologies that better support students from diverse language backgrounds.
+
+
+
+Compensation for Participation 
+
+Eligible Cornell participants who complete both ideation tasks and all associated survey measures will receive Cornell SONA research participation credit at a rate of 0.5 SONA credit per 30 minutes of participation. Credits will be awarded after study completion and verification of participation. 
+If the study session extends at least 15 minutes beyond the expected duration, participants will receive additional SONA credit calculated at the same rate (e.g., 45-60 minutes of participation will correspond to 1 SONA credit).
+If you choose not to participate in research to obtain extra credit, please consult your instructor, who may offer comparable alternative assignments that you can complete in lieu of research participation (e.g., written assignments or participation in other research studies). As the study is part of a class project, there is no external funding, and monetary compensation cannot be provided.
+
+
+
+Audio/Video Recording 
+
+This research study does not involve any audio or video recording. We will only collect information that you type and select during the study. This includes your messages to the AI chatbot, the chatbot’s responses, the outline you create during the brainstorming tasks, and your answers to the survey questions. We will also record basic interaction information from the system, such as how many messages you send, how many times you ask the chatbot to regenerate a response, and timestamps showing when interactions occur. No voice, camera, or screen recordings will be used.
+
+
+
+Privacy, Confidentiality, and Data Security 
+
+We anticipate that your participation in this study presents no greater risk than everyday use of the internet. The chatbot used in this study was developed specifically for this research and runs on a secure server controlled by the research team. It does not rely on uncontrolled third-party AI systems. Your interactions with the AI tool will not be used to train external models in any capacity. Your responses will not be linked to your name. If Cornell SONA information is collected for credit-awarding purposes, it will be stored separately from study data and deleted after credit is assigned. The dialogue and chatbot interaction logs will be anonymized and stored in encrypted databases on Cornell Box. Only researchers involved in this study will have access to this data. In any reports or publications, we will present only aggregated results and will not include any information that could identify you.
+
+
+
+Sharing De-identified Data Collected in this Research 
+
+De-identified data from this study may be shared with the research community at large to advance scientific understanding. Any shared data will have identifying information removed or coded so that, by current scientific standards, individuals cannot reasonably be identified. Despite these measures, we cannot guarantee absolute anonymity.
+
+
+
+Future use of Identifiable Data Collected in this Research 
+
+Your identifiable information will not be used or distributed for future research studies.
+
+
+
+Taking part is voluntary
+
+Taking part in this study is completely voluntary. If you decide to participate, you are free to withdraw at any time for any reason. Your decision whether or not to participate will not affect your grade, academic standing, or relationship with your instructors or Cornell University. Use of the researcher-created generative AI tool is required to complete the study tasks. Individuals who do not wish to use the AI system should not continue. If you choose not to participate, or if you withdraw before completing the study, you may complete an alternative credit-awarding activity on the Cornell SONA research study opportunities site.
+
+
+
+If you have questions 
+
+If you have questions about the study, you may contact Tran Le (tnl22@cornell.edu) or the project supervisor, Susan Fussell (sfussell@cornell.edu) at any time. If you have concerns regarding your rights as a participant, you may contact the Institutional Review Board (IRB) for Human Participants at 607-255-6182 or access their website at http://www.irb.cornell.edu. You may also report your concerns or complaints anonymously through Ethicspoint online at www.hotline.cornell.edu or by calling toll free at 1-866-293-3077. Ethicspoint is an independent organization that serves as a liaison between the University and the person bringing the complaint so that anonymity can be ensured.
+
+
+
+Statement of Consent 
+
+By selecting “I consent to participate,” you confirm that:
+
+	You are 18 years of age or older.
+	You have read and understood the information above.
+	You have had the opportunity to ask questions.
+	You voluntarily agree to participate in this research study.","What is your SONA ID? (Please enter your 5-digit SONA ID only. Do not enter your NetID. If you don't have a SONA ID, please enter N/A and continue.)",What is your native language?,Please watch the video to continue.,"TASK 1
+
+
+  
+    You must ONLY use EX-LANG in this task
+  
+
+
+ 
+
+I understand that I must only use EX-LANG in this task
+
+
+  
+    Please complete this task using the 
+    
+       AI Prototype
+    .
+  
+
+  
+
+
+
+  Note that this page will automatically proceed once you complete the task in the AI Prototype.","TASK 2
+
+
+  
+    You must ONLY use EX-LANG in this task
+  
+
+
+ 
+
+I understand that I must only use EX-LANG in this task
+
+
+  
+    Please complete this task using the 
+    
+       AI Prototype
+    .
+  
+
+  
+
+
+
+  Note that this page will automatically proceed once you complete the task in the AI Prototype.","A. Problem Understanding
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - A1. I was able to identify multiple important aspects of the problem described in the task prompt.","A. Problem Understanding
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - Native language","A. Problem Understanding
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - English","A. Problem Understanding
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - A2. I had difficulty recognizing the different constraints involved in addressing this problem.","A. Problem Understanding
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - Native language","A. Problem Understanding
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - English","A. Problem Understanding
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - A3. I was able to identify important causes or factors contributing to this problem.","A. Problem Understanding
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - Native language","A. Problem Understanding
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - English","B. Idea Development
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - B1. I was able to come up with several possible distinct ideas to address the problem.","B. Idea Development
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - Native language","B. Idea Development
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - English","B. Idea Development
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - B2. I was able to expand my initial ideas into clearer and more detailed solutions.","B. Idea Development
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - Native language","B. Idea Development
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - English","B. Idea Development
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - B3. I struggled to think of concrete examples or evidence to support my proposed solutions..","B. Idea Development
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - Native language","B. Idea Development
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - English","C. Solution Evaluation
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - C1. I was able to assess if my solutions would effectively and realistically address the problem.","C. Solution Evaluation
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - Native language","C. Solution Evaluation
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - English","C. Solution Evaluation
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - C2. I was able to identify potential drawbacks of my proposed solutions.","C. Solution Evaluation
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - Native language","C. Solution Evaluation
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - English","C. Solution Evaluation
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - C3. I struggled to judge whether my proposed solutions were well supported by examples or evidence.","C. Solution Evaluation
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - Native language","C. Solution Evaluation
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - English","D. AI Prompt Construction
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - D1. I had to carefully choose specific words or terminology in my AI prompts to get useful responses.","D. AI Prompt Construction
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - Native language","D. AI Prompt Construction
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - English","D. AI Prompt Construction
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - D2. I did not need to repeatedly re-prompt the AI much to get useful or sufficiently detailed ideas.","D. AI Prompt Construction
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - Native language","D. AI Prompt Construction
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - English","D. AI Prompt Construction
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - D3. I found it difficult to figure out how to phrase my AI prompts effectively.","D. AI Prompt Construction
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - Native language","D. AI Prompt Construction
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - English","E. Agency
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - E1. Without the AI, I would not have arrived at most of these ideas on my own.","E. Agency
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - Native language","E. Agency
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - English","E. Agency
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - E2. I felt in control of the direction of the brainstorming.","E. Agency
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - Native language","E. Agency
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - English","E. Agency
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - E3. I actively decided which ideas to keep or reject during the interaction.","E. Agency
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - Native language","E. Agency
+For each statement, please rate your experience of interaction with the AI in your native language and English, where 1 = strongly disagree; 7 = strongly agree. - English","F. Overall Preference
+
+Which condition did you prefer overall?","If you would like, briefly explain why you preferred one language over the other, or why you felt there was little or no difference. You may elaborate on your ratings for the statements above and/or mention any other factors that influenced your experience.","Before completing the tasks, how familiar were you with the following topics? - Housing affordability","Before completing the tasks, how familiar were you with the following topics? - Urban overcrowding",How frequently do you use AI for help with writing assignments?,What do you typically use AI for when getting help with writing assignments? (Select all that apply),Which language do you usually use when using AI for help with writing assignments?,"When using AI for writing assignments, how often do you switch between your native language and English within the same interaction?","When you switch between your native language and English while using AI for writing assignments, which language do you switch to for the following purposes? - To better understand the assignment or topic","When you switch between your native language and English while using AI for writing assignments, which language do you switch to for the following purposes? - To find sources","When you switch between your native language and English while using AI for writing assignments, which language do you switch to for the following purposes? - To read materials","When you switch between your native language and English while using AI for writing assignments, which language do you switch to for the following purposes? - To generate ideas","When you switch between your native language and English while using AI for writing assignments, which language do you switch to for the following purposes? - To organize or outline ideas","When you switch between your native language and English while using AI for writing assignments, which language do you switch to for the following purposes? - To evaluate or compare ideas","When you switch between your native language and English while using AI for writing assignments, which language do you switch to for the following purposes? - To write a draft","When you switch between your native language and English while using AI for writing assignments, which language do you switch to for the following purposes? - To improve vocabulary or grammar","When you switch between your native language and English while using AI for writing assignments, which language do you switch to for the following purposes? - To check whether the writing sounds natural","When you switch between your native language and English while using AI for writing assignments, which language do you switch to for the following purposes? - To get clearer or more detailed responses",What is your native language?,Years using English (numbers only; enter a single digit if under 10):,Which language do you usually feel more comfortable using for the following activities (without AI help)? - Thinking about ideas for writing assignments,Which language do you usually feel more comfortable using for the following activities (without AI help)? - Evaluating or comparing possible ideas,Which language do you usually feel more comfortable using for the following activities (without AI help)? - Organizing ideas,"Which language do you usually feel more comfortable using for the following activities (without AI help)? - Reading academic materials (e.g., articles, textbooks)","Which language do you usually feel more comfortable using for the following activities (without AI help)? - Searching for academic information online (e.g., articles, sources)",What is your age? - Selected Choice,What is your age? - Other - Text,What is your gender?,What is your field of study?,Please leave any additional comments or concerns that you would like us to know.,Q_RecaptchaStatus,Q_RecaptchaError
+"{""ImportId"":""startDate"",""timeZone"":""America/Denver""}","{""ImportId"":""endDate"",""timeZone"":""America/Denver""}","{""ImportId"":""status""}","{""ImportId"":""ipAddress""}","{""ImportId"":""progress""}","{""ImportId"":""duration""}","{""ImportId"":""finished""}","{""ImportId"":""recordedDate"",""timeZone"":""America/Denver""}","{""ImportId"":""_recordId""}","{""ImportId"":""recipientLastName""}","{""ImportId"":""recipientFirstName""}","{""ImportId"":""recipientEmail""}","{""ImportId"":""externalDataReference""}","{""ImportId"":""locationLatitude""}","{""ImportId"":""locationLongitude""}","{""ImportId"":""distributionChannel""}","{""ImportId"":""userLanguage""}","{""ImportId"":""Q_RecaptchaScore""}","{""ImportId"":""QID1""}","{""ImportId"":""QID2_TEXT""}","{""ImportId"":""QID4""}","{""ImportId"":""QID3""}","{""ImportId"":""QID6""}","{""ImportId"":""QID7""}","{""ImportId"":""QID43_1""}","{""ImportId"":""QID43_2""}","{""ImportId"":""QID43_3""}","{""ImportId"":""QID43_4""}","{""ImportId"":""QID43_5""}","{""ImportId"":""QID43_6""}","{""ImportId"":""QID43_7""}","{""ImportId"":""QID43_8""}","{""ImportId"":""QID43_9""}","{""ImportId"":""QID54_1""}","{""ImportId"":""QID54_2""}","{""ImportId"":""QID54_3""}","{""ImportId"":""QID54_4""}","{""ImportId"":""QID54_5""}","{""ImportId"":""QID54_6""}","{""ImportId"":""QID54_7""}","{""ImportId"":""QID54_8""}","{""ImportId"":""QID54_9""}","{""ImportId"":""QID55_1""}","{""ImportId"":""QID55_2""}","{""ImportId"":""QID55_3""}","{""ImportId"":""QID55_4""}","{""ImportId"":""QID55_5""}","{""ImportId"":""QID55_6""}","{""ImportId"":""QID55_7""}","{""ImportId"":""QID55_8""}","{""ImportId"":""QID55_9""}","{""ImportId"":""QID56_1""}","{""ImportId"":""QID56_2""}","{""ImportId"":""QID56_3""}","{""ImportId"":""QID56_4""}","{""ImportId"":""QID56_5""}","{""ImportId"":""QID56_6""}","{""ImportId"":""QID56_7""}","{""ImportId"":""QID56_8""}","{""ImportId"":""QID56_9""}","{""ImportId"":""QID57_1""}","{""ImportId"":""QID57_2""}","{""ImportId"":""QID57_3""}","{""ImportId"":""QID57_4""}","{""ImportId"":""QID57_5""}","{""ImportId"":""QID57_6""}","{""ImportId"":""QID57_7""}","{""ImportId"":""QID57_8""}","{""ImportId"":""QID57_9""}","{""ImportId"":""QID23""}","{""ImportId"":""QID24_TEXT""}","{""ImportId"":""QID30_1""}","{""ImportId"":""QID30_2""}","{""ImportId"":""QID31""}","{""ImportId"":""QID32""}","{""ImportId"":""QID33""}","{""ImportId"":""QID34""}","{""ImportId"":""QID35_1""}","{""ImportId"":""QID35_2""}","{""ImportId"":""QID35_3""}","{""ImportId"":""QID35_4""}","{""ImportId"":""QID35_5""}","{""ImportId"":""QID35_6""}","{""ImportId"":""QID35_7""}","{""ImportId"":""QID35_8""}","{""ImportId"":""QID35_9""}","{""ImportId"":""QID35_10""}","{""ImportId"":""QID39""}","{""ImportId"":""QID41_TEXT""}","{""ImportId"":""QID44_1""}","{""ImportId"":""QID44_2""}","{""ImportId"":""QID44_3""}","{""ImportId"":""QID44_4""}","{""ImportId"":""QID44_5""}","{""ImportId"":""QID46""}","{""ImportId"":""QID46_9_TEXT""}","{""ImportId"":""QID47""}","{""ImportId"":""QID48""}","{""ImportId"":""QID49_TEXT""}","{""ImportId"":""Q_RecaptchaStatus""}","{""ImportId"":""Q_RecaptchaError""}"
+2026-03-17 14:03:34,2026-03-17 14:37:55,IP Address,*******,100,2060,True,2026-03-17 14:37:55,R_1JfwagX6QEyEsWO,*******,*******,*******,*******,*******,*******,anonymous,EN,0.8999999761581421,I consent to participate,"N/A
+",Chinese (Simplified),I confirm that I have watched the instructions video carefully and understand how to interact with the prototype.,,,,4,6,,5,5,,5,6,,5,5,,7 strongly agree,7 strongly agree,,2,3,,5,6,,5,5,,2,1 Strongly disagree,,6,4,,5,4,,6,5,,1 Strongly disagree,1 Strongly disagree,,7 strongly agree,7 strongly agree,,7 strongly agree,6,English,"I am used to do prompt engineering in English (like for my course team projects and finishing my homework) and actually I haven't used my native language to prompt the AI for many times, so I am more familiar with the logics in English prompts to target the AI with the kind of outputs I want. For example if I want the detailed processes of answering a math question I would want the AI to name all the formula and equations it used, and answering a economic question I would want the interest rates, which the names of those are learned in an English environment and the wordings/jargons are more familiar to me. However in Chinese sometimes I have to think particularly on the wordings and jargons and it generates mind gaps for me during the brainstorm process and is wasting more time in thinking during the short 10 min period of time",4 Moderately familiar,3,Often,"To better understand the assignment or prompt,Early in the process to help generate initial ideas,After I get stuck or run out of ideas,After I develop my own ideas to expand or refine them,To organize or outline my ideas,To improve vocabulary or grammar,To revise or polish full drafts",Mostly English,Never,,,,,,,,,,,Chinese (simplified),12,English,English,English,English,Both,21,,Male,Biological Engineering,,complete,
+2026-04-10 14:34:58,2026-04-10 15:06:29,IP Address,*******,100,1891,True,2026-04-10 15:06:29,R_3QAs55UniaClhqM,*******,*******,*******,*******,*******,*******,anonymous,EN,1,I consent to participate," 95461",Spanish,I confirm that I have watched the instructions video carefully and understand how to interact with the prototype.,,,,7 strongly agree,,,1 Strongly disagree,,,4,,,5,,,4,,,2,,,5,,,6,,,6,,,5,,,6,,,4,,,2,,,5,,,6,,English,"I prefer the English one because I am in an environment where I constantly use English and most of the things I've learned are in English and I feel more familiar with those topics in English than I do in my native language. And I feel like I read more about the ideas offered in the english one than in the native language, in the native language I did read some ideas but I came up with my ideas more than I did in the english experiment ",3,3,Sometimes,"To better understand the assignment or prompt,Early in the process to help generate initial ideas,After I get stuck or run out of ideas,To translate between languages (native language ↔ English),To improve vocabulary or grammar",Mostly English,Never,,,,,,,,,,,Spanish,6,Both,Native Language,Both,Both,English,20,,Female,Psychology,,complete,
+2026-04-20 10:35:28,2026-04-20 11:09:02,IP Address,*******,100,2013,True,2026-04-20 11:09:02,R_6eyIYHf7erBuCq1,*******,*******,*******,*******,*******,*******,anonymous,EN,1,I consent to participate,33841,Korean,I confirm that I have watched the instructions video carefully and understand how to interact with the prototype.,,,,5,6,,6,6,,6,6,,5,6,,4,6,,7 strongly agree,6,,6,6,,6,6,,6,6,,6,6,,3,5,,6,3,,6,6,,4,4,,4,4,English,"Though I speak Korean natively, all my education was in English so it was easier to create ideas, prompt AI, assess AI's ideas, then adapt them into my own outline compared to Korean (in which typically only have casual conversations, nothing technical)",1 Not familiar at all,1 Not familiar at all,Sometimes,"To better understand the assignment or prompt,Early in the process to help generate initial ideas,To improve vocabulary or grammar,To revise or polish full drafts",Mostly English,Never,,,,,,,,,,,Korean,22,English,English,English,English,English,22,,Female,Information Science,,complete,
+2026-04-22 21:15:00,2026-04-22 21:34:50,IP Address,*******,100,1190,True,2026-04-22 21:34:50,R_5QK5L4cW7RYnTmG,*******,*******,*******,*******,*******,*******,anonymous,EN,1,I consent to participate,33001,Spanish,I confirm that I have watched the instructions video carefully and understand how to interact with the prototype.,,,,6,6,,3,3,,6,6,,7 strongly agree,6,,7 strongly agree,6,,5,4,,6,6,,3,3,,5,4,,6,6,,7 strongly agree,7 strongly agree,,2,1 Strongly disagree,,3,3,,6,6,,7 strongly agree,6,English,"English was much more easy to understand, probably because i have been working with it a lot more compared to spanish. I also have never used an AI chat in Spanish before so this may have affected why I preferred the English bot. ",5,5,Rarely,"To better understand the assignment or prompt,To organize or outline my ideas",Mostly English,Never,,,,,,,,,,,Spanish,19,English,English,English,English,English,20,,Male,Biology & Society,,complete,
+2026-04-23 18:03:49,2026-04-23 18:29:08,IP Address,*******,100,1518,True,2026-04-23 18:29:08,R_5sjKcOx2GdutmH9,*******,*******,*******,*******,*******,*******,anonymous,EN,1,I consent to participate,N/A,Vietnamese,I confirm that I have watched the instructions video carefully and understand how to interact with the prototype.,,,,6,6,,1 Strongly disagree,3,,5,4,,6,5,,6,5,,4,6,,6,5,,6,4,,4,5,,6,6,,7 strongly agree,7 strongly agree,,4,6,,4,6,,5,5,,4,4,Native language,,4 Moderately familiar,4 Moderately familiar,Often,"Early in the process to help generate initial ideas,After I get stuck or run out of ideas,After I develop my own ideas to expand or refine them,To revise or polish full drafts",Mostly English,Never,,,,,,,,,,,Vietnamese,10,Both,Both,Both,Native Language,Native Language,18,,Female,Applied Economics and Management,,complete,

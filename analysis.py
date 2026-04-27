@@ -11,7 +11,7 @@ import itertools
 
 # 1. Load Data
 
-survey = pd.read_csv("data/survey.csv")
+survey = pd.read_csv("data/clean_survey.csv")
 logs = pd.read_csv("data/logs.csv")
 
 
