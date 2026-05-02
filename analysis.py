@@ -1,313 +1,447 @@
 import pandas as pd
 import numpy as np
-from scipy.stats import ttest_rel, wilcoxon, pearsonr
+import re
 import matplotlib.pyplot as plt
-import textstat
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
-import itertools
+from scipy.stats import ttest_rel, wilcoxon
 
+LOG_FILE = "output.csv"
+PART_FILE = "output_participants.csv"
+SURVEY_FILE = "AI_Ideation.xlsx"
 
+# =========================
+# 1. Read files
+# =========================
+logs = pd.read_csv(LOG_FILE)
+parts = pd.read_csv(PART_FILE)
+survey = pd.read_excel(SURVEY_FILE)
 
-# 1. Load Data
+for df in [logs, parts, survey]:
+    df.columns = df.columns.str.strip().str.lower()
 
-survey = pd.read_csv("data/clean_survey.csv")
-logs = pd.read_csv("data/logs.csv")
+logs["user_id"] = logs["user_id"].astype(str)
+parts["user_id"] = parts["user_id"].astype(str)
 
+# =========================
+# 2. Clean participant output data
+# =========================
+parts = parts[
+    parts["user_id"].notna()
+    & (parts["user_id"].str.upper() != "N/A")
+    & (parts["completed"] == 1)
+].copy()
 
-# 2. Clean Survey Data
+# =========================
+# 3. Helper functions
+# =========================
+def count_words(text):
+    if pd.isna(text):
+        return 0
+    return len(re.findall(r"\b\w+\b", str(text), flags=re.UNICODE))
 
-# Example expected survey columns:
-# participant_id
-# problem_understanding_L1, problem_understanding_EN
-# idea_development_L1, idea_development_EN
-# solution_evaluation_L1, solution_evaluation_EN
-# efficiency_L1, efficiency_EN
-# cognitive_load_L1, cognitive_load_EN
-# agency_L1, agency_EN
-# satisfaction_L1, satisfaction_EN
-# preferred_condition
+def count_chars(text):
+    if pd.isna(text):
+        return 0
+    return len(str(text))
 
-survey = survey.dropna(subset=["participant_id"])
+def count_solutions(text):
+    if pd.isna(text):
+        return 0
+    text = str(text).lower()
+    patterns = [
+        r"\bsolution\s*1\b", r"\bsolution\s*2\b",
+        r"\b1[\.\)]", r"\b2[\.\)]",
+        r"\bfirst\b", r"\bsecond\b",
+        r"첫 번째", r"두 번째",
+        r"thứ nhất", r"thứ hai"
+    ]
+    count = sum(len(re.findall(p, text)) for p in patterns)
+    return min(count, 4)
 
-metrics = [
-    "problem_understanding",
-    "idea_development",
-    "solution_evaluation",
-    "efficiency",
-    "cognitive_load",
-    "agency",
-    "satisfaction"
-]
+def has_tradeoff(text):
+    if pd.isna(text):
+        return 0
 
+    text = str(text).lower()
 
-# 3. Paired Comparison: L1 vs English
+    # 强信号（明确 trade-off）
+    strong_keywords = [
+        # English
+        "trade-off", "tradeoff", "limitation", "drawback", "downside", "risk", "cost",
 
+        # Chinese
+        "缺点", "局限", "代价", "风险", "问题",
 
-results = []
+        # Korean
+        "문제점", "한계", "단점",
 
-for metric in metrics:
-    l1_col = f"{metric}_L1"
-    en_col = f"{metric}_EN"
+        # Vietnamese
+        "hạn chế", "nhược điểm", "rủi ro"
+    ]
 
-    df = survey[[l1_col, en_col]].dropna()
+    # 弱信号（需要搭配使用）
+    contrast_words = [
+        "however", "but", "on the other hand",
+        "但是", "然而",
+        "하지만",
+        "tuy nhiên"
+    ]
 
-    l1_mean = df[l1_col].mean()
-    en_mean = df[en_col].mean()
+    # 👉 规则1：有强信号直接算
+    if any(k in text for k in strong_keywords):
+        return 1
 
-    diff = df[l1_col] - df[en_col]
+    # 👉 规则2：弱信号 + 对比结构（更严格）
+    if any(w in text for w in contrast_words):
+        # 简单结构判断（避免误判）
+        if ("more" in text and "less" in text) or ("increase" in text and "decrease" in text):
+            return 1
 
-    # Paired t-test
-    t_stat, p_value = ttest_rel(df[l1_col], df[en_col])
+    return 0
 
-    # Wilcoxon test, safer for small sample size
+def reverse_7(x):
+    if pd.isna(x):
+        return np.nan
+    return 8 - x
+
+def paired_test(l1, l2):
+    diff = l1 - l2
+    result = {
+        "L1_mean": l1.mean(),
+        "L2_mean": l2.mean(),
+        "mean_diff_L1_minus_L2": diff.mean(),
+        "n": len(l1)
+    }
+
+    if len(l1) >= 2 and diff.std(ddof=1) != 0:
+        result["paired_t_p"] = ttest_rel(l1, l2).pvalue
+    else:
+        result["paired_t_p"] = np.nan
+
     try:
-        w_stat, w_p = wilcoxon(df[l1_col], df[en_col])
-    except ValueError:
-        w_stat, w_p = np.nan, np.nan
+        if (diff != 0).any():
+            result["wilcoxon_p"] = wilcoxon(l1, l2).pvalue
+        else:
+            result["wilcoxon_p"] = np.nan
+    except Exception:
+        result["wilcoxon_p"] = np.nan
 
-    results.append({
-        "Metric": metric,
-        "L1 Mean": round(l1_mean, 3),
-        "English Mean": round(en_mean, 3),
-        "Mean Difference": round(diff.mean(), 3),
-        "Paired t-test p": round(p_value, 4),
-        "Wilcoxon p": round(w_p, 4)
-    })
+    return result
 
-results_df = pd.DataFrame(results)
-print("\n=== Paired Comparison Results ===")
-print(results_df)
+# =========================
+# 4. Behavior analysis from logs
+# =========================
+logs["timestamp"] = pd.to_datetime(logs["timestamp"], errors="coerce")
+logs = logs.sort_values(["user_id", "timestamp", "id"]).copy()
 
-results_df.to_csv("paired_comparison_results.csv", index=False)
-
-
-# 4. Plot L1 vs English Mean Ratings
-
-plot_data = []
-
-for metric in metrics:
-    plot_data.append({
-        "Metric": metric,
-        "Condition": "Native Language",
-        "Mean": survey[f"{metric}_L1"].mean()
-    })
-    plot_data.append({
-        "Metric": metric,
-        "Condition": "English",
-        "Mean": survey[f"{metric}_EN"].mean()
-    })
-
-plot_df = pd.DataFrame(plot_data)
-
-plt.figure(figsize=(12, 6))
-
-for condition in ["Native Language", "English"]:
-    subset = plot_df[plot_df["Condition"] == condition]
-    plt.plot(subset["Metric"], subset["Mean"], marker="o", label=condition)
-
-plt.title("Mean Survey Ratings: Native Language vs English")
-plt.xlabel("Survey Dimension")
-plt.ylabel("Mean Rating")
-plt.xticks(rotation=30, ha="right")
-plt.ylim(1, 7)
-plt.legend()
-plt.tight_layout()
-plt.savefig("survey_l1_vs_english.png", dpi=300)
-plt.show()
-
-
-
-# 5. Clean Log Data
-
-# Example expected log columns:
-# participant_id
-# condition: L1 or EN
-# prompt_count
-# regeneration_count
-# start_time
-# end_time
-# outline_text
-
-logs["outline_text"] = logs["outline_text"].fillna("")
-
-logs["outline_word_count"] = logs["outline_text"].apply(lambda x: len(str(x).split()))
-logs["outline_char_count"] = logs["outline_text"].apply(lambda x: len(str(x)))
-
-# Optional readability score
-logs["readability_score"] = logs["outline_text"].apply(
-    lambda x: textstat.flesch_reading_ease(str(x)) if len(str(x).split()) > 10 else np.nan
+# A new task starts when user message starts with "Task prompt:"
+logs["is_task_start"] = (
+    (logs["role"].str.lower() == "user")
+    & logs["content"].astype(str).str.startswith("Task prompt:")
 )
 
+logs["task_order"] = logs.groupby("user_id")["is_task_start"].cumsum()
+logs = logs[logs["task_order"] > 0].copy()
 
+user_msgs = logs[logs["role"].str.lower() == "user"].copy()
+assistant_msgs = logs[logs["role"].str.lower() == "assistant"].copy()
 
-# 6. Behavioral Comparison
+behavior = logs.groupby(["user_id", "task_order"]).agg(
+    start_time=("timestamp", "min"),
+    end_time=("timestamp", "max"),
+    total_messages=("id", "count")
+).reset_index()
 
+prompt_metrics = user_msgs.groupby(["user_id", "task_order"]).agg(
+    prompt_count=("id", "count"),
+    user_words=("content", lambda x: sum(count_words(v) for v in x)),
+    user_chars=("content", lambda x: sum(count_chars(v) for v in x)),
+    avg_prompt_words=("content", lambda x: np.mean([count_words(v) for v in x])),
+).reset_index()
 
-behavior_metrics = [
+assistant_metrics = assistant_msgs.groupby(["user_id", "task_order"]).agg(
+    assistant_count=("id", "count"),
+    assistant_words=("content", lambda x: sum(count_words(v) for v in x)),
+).reset_index()
+
+behavior = behavior.merge(prompt_metrics, on=["user_id", "task_order"], how="left")
+behavior = behavior.merge(assistant_metrics, on=["user_id", "task_order"], how="left")
+
+behavior["duration_seconds"] = (
+    behavior["end_time"] - behavior["start_time"]
+).dt.total_seconds()
+
+if "edit_index" in logs.columns:
+    regen = logs[
+        logs["edit_index"].notna()
+    ].groupby(["user_id", "task_order"]).size().reset_index(name="regenerate_count")
+    behavior = behavior.merge(regen, on=["user_id", "task_order"], how="left")
+else:
+    behavior["regenerate_count"] = 0
+
+behavior = behavior.fillna(0)
+
+# =========================
+# 5. Final draft output analysis
+# =========================
+parts["draft_words"] = parts["final_draft"].apply(count_words)
+parts["draft_chars"] = parts["final_draft"].apply(count_chars)
+parts["solution_count"] = parts["final_draft"].apply(count_solutions)
+parts["has_tradeoff"] = parts["final_draft"].apply(has_tradeoff)
+
+task_df = parts.merge(
+    behavior,
+    on=["user_id", "task_order"],
+    how="left"
+).fillna(0)
+
+task_df["condition"] = np.where(
+    task_df["language"].str.lower() == "english",
+    "L2_English",
+    "L1_Native"
+)
+
+#task_df.to_excel("task_level_behavior_output.xswl", index=False)
+
+# =========================
+# 6. Paired L1 vs L2 behavior/output
+# =========================
+metrics = [
     "prompt_count",
-    "regeneration_count",
-    "outline_word_count",
-    "outline_char_count",
-    "readability_score"
+    "avg_prompt_words",
+    "user_words",
+    "assistant_count",
+    "assistant_words",
+    "duration_seconds",
+    "regenerate_count",
+    "draft_words",
+    "draft_chars",
+    "solution_count",
+    "has_tradeoff"
 ]
+
+paired_rows = []
+
+for uid, group in task_df.groupby("user_id"):
+    l1 = group[group["condition"] == "L1_Native"]
+    l2 = group[group["condition"] == "L2_English"]
+
+    if len(l1) == 1 and len(l2) == 1:
+        row = {"user_id": uid}
+        for m in metrics:
+            row[f"{m}_L1"] = l1[m].values[0]
+            row[f"{m}_L2"] = l2[m].values[0]
+            row[f"{m}_diff"] = l1[m].values[0] - l2[m].values[0]
+        paired_rows.append(row)
+
+paired_behavior = pd.DataFrame(paired_rows)
+# paired_behavior.to_csv("paired_behavior_output.csv", index=False)
 
 behavior_results = []
 
-for metric in behavior_metrics:
-    pivot = logs.pivot(index="participant_id", columns="condition", values=metric).dropna()
+for m in metrics:
+    if f"{m}_L1" in paired_behavior.columns:
+        res = paired_test(
+            paired_behavior[f"{m}_L1"],
+            paired_behavior[f"{m}_L2"]
+        )
+        res["metric"] = m
+        behavior_results.append(res)
 
-    if "L1" in pivot.columns and "EN" in pivot.columns:
-        t_stat, p_value = ttest_rel(pivot["L1"], pivot["EN"])
-
-        behavior_results.append({
-            "Behavior Metric": metric,
-            "L1 Mean": round(pivot["L1"].mean(), 3),
-            "English Mean": round(pivot["EN"].mean(), 3),
-            "Mean Difference": round((pivot["L1"] - pivot["EN"]).mean(), 3),
-            "p-value": round(p_value, 4)
-        })
-
-behavior_df = pd.DataFrame(behavior_results)
-
-print("\n=== Behavioral Comparison Results ===")
-print(behavior_df)
-
-behavior_df.to_csv("behavioral_comparison_results.csv", index=False)
-
-
-
-# 7. Plot Behavioral Metrics
-
-
-for metric in behavior_metrics:
-    summary = logs.groupby("condition")[metric].mean().reset_index()
-
-    plt.figure(figsize=(6, 4))
-    plt.bar(summary["condition"], summary[metric])
-    plt.title(f"Average {metric}: L1 vs English")
-    plt.xlabel("Condition")
-    plt.ylabel(metric)
-    plt.tight_layout()
-    plt.savefig(f"{metric}_comparison.png", dpi=300)
-    plt.show()
-
+behavior_results = pd.DataFrame(behavior_results)
+# behavior_results.to_csv("behavior_output_stats.csv", index=False)
 
 # =========================
-# 8. Preference Count
+# 7. Survey analysis
 # =========================
+survey = survey.rename(columns={"participant_id": "user_id"})
+survey["user_id"] = survey["user_id"].astype(str)
 
-if "preferred_condition" in survey.columns:
-    preference_counts = survey["preferred_condition"].value_counts()
+# remove Qualtrics question-text row
+survey = survey[
+    survey["user_id"].notna()
+    & ~survey["user_id"].str.contains("What is your SONA ID", na=False)
+    & (survey["user_id"].str.upper() != "N/A")
+].copy()
 
-    print("\n=== Preference Counts ===")
-    print(preference_counts)
+# convert survey rating columns to numeric
+for col in survey.columns:
+    if re.search(r"_(\d+)$", col):
+        survey[col] = pd.to_numeric(survey[col], errors="coerce")
 
-    plt.figure(figsize=(6, 4))
-    preference_counts.plot(kind="bar")
-    plt.title("Overall Language Preference")
-    plt.xlabel("Preferred Condition")
-    plt.ylabel("Number of Participants")
-    plt.tight_layout()
-    plt.savefig("language_preference.png", dpi=300)
-    plt.show()
+# In Qualtrics export pattern:
+# each construct has 9 columns:
+# item text col, Native rating, English rating, repeated 3 times.
+constructs = {
+    "problem_understanding": {
+        "prefix": "prob_understanding",
+        "reverse_items": [2]
+    },
+    "idea_development": {
+        "prefix": "idea_development",
+        "reverse_items": [3]
+    },
+    "solution_evaluation": {
+        "prefix": "solution_evaluation",
+        "reverse_items": [3]
+    },
+    "efficiency": {
+        "prefix": "efficiency",
+        "reverse_items": [2, 3]
+    },
+    "agency": {
+        "prefix": "agency",
+        "reverse_items": [1]
+    }
+}
 
+survey_scores = survey[["user_id", "overall_preference", "explanation"]].copy()
 
-# =========================
-# 9. Correlation Analysis
-# =========================
+for construct, info in constructs.items():
+    prefix = info["prefix"]
+    reverse_items = info["reverse_items"]
 
-# Example: prompt count vs satisfaction
-merged = logs.merge(survey, on="participant_id", how="left")
+    l1_items = []
+    l2_items = []
 
-correlation_results = []
+    # item 1: _2 native, _3 english
+    # item 2: _5 native, _6 english
+    # item 3: _8 native, _9 english
+    mapping = {
+        1: (f"{prefix}_2", f"{prefix}_3"),
+        2: (f"{prefix}_5", f"{prefix}_6"),
+        3: (f"{prefix}_8", f"{prefix}_9"),
+    }
 
-for condition in ["L1", "EN"]:
-    subset = merged[merged["condition"] == condition]
-
-    satisfaction_col = f"satisfaction_{condition}"
-
-    if satisfaction_col in subset.columns:
-        temp = subset[["prompt_count", "regeneration_count", "outline_word_count", satisfaction_col]].dropna()
-
-        for behavior in ["prompt_count", "regeneration_count", "outline_word_count"]:
-            if len(temp) > 2:
-                r, p = pearsonr(temp[behavior], temp[satisfaction_col])
-
-                correlation_results.append({
-                    "Condition": condition,
-                    "Behavior": behavior,
-                    "Survey Outcome": satisfaction_col,
-                    "Correlation r": round(r, 3),
-                    "p-value": round(p, 4)
-                })
-
-correlation_df = pd.DataFrame(correlation_results)
-
-print("\n=== Correlation Results ===")
-print(correlation_df)
-
-correlation_df.to_csv("correlation_results.csv", index=False)
-
-
-# =========================
-# 10. Simple Qualitative Coding Helper
-# =========================
-
-if "open_ended_response" in survey.columns:
-    open_responses = survey[["participant_id", "open_ended_response"]].dropna()
-    open_responses.to_csv("open_ended_responses_for_coding.csv", index=False)
-
-    print("\nOpen-ended responses exported for qualitative coding.")
-
-
-# 11. Cosine Similarity Analysis 
-
-print("\nRunning Cosine Similarity Analysis ")
-
-# Load embedding model
-model = SentenceTransformer('all-MiniLM-L6-v2')
-
-similarity_results = []
-
-# divide by prompt 
-for prompt in logs["prompt"].unique():
-
-    subset_prompt = logs[logs["prompt"] == prompt]
-
-    for condition in ["L1", "EN"]:
-        subset = subset_prompt[subset_prompt["condition"] == condition]
-
-        texts = subset["outline_text"].dropna().tolist()
-
-        # 至少要有2个才有意义
-        if len(texts) < 2:
+    for item_num, (l1_col, l2_col) in mapping.items():
+        if l1_col not in survey.columns or l2_col not in survey.columns:
             continue
 
-        # 生成 embeddings
-        embeddings = model.encode(texts)
+        l1_series = survey[l1_col].copy()
+        l2_series = survey[l2_col].copy()
 
-        # 计算 pairwise similarity
-        sim_matrix = cosine_similarity(embeddings)
+        if item_num in reverse_items:
+            l1_series = l1_series.apply(reverse_7)
+            l2_series = l2_series.apply(reverse_7)
 
-        # 取上三角（避免重复和自己跟自己比）
-        sim_scores = []
+        survey_scores[f"{construct}_item{item_num}_L1"] = l1_series
+        survey_scores[f"{construct}_item{item_num}_L2"] = l2_series
 
-        for i, j in itertools.combinations(range(len(texts)), 2):
-            sim_scores.append(sim_matrix[i][j])
+        l1_items.append(f"{construct}_item{item_num}_L1")
+        l2_items.append(f"{construct}_item{item_num}_L2")
 
-        avg_similarity = np.mean(sim_scores)
+    survey_scores[f"{construct}_L1"] = survey_scores[l1_items].mean(axis=1)
+    survey_scores[f"{construct}_L2"] = survey_scores[l2_items].mean(axis=1)
+    survey_scores[f"{construct}_diff"] = (
+        survey_scores[f"{construct}_L1"] - survey_scores[f"{construct}_L2"]
+    )
 
-        similarity_results.append({
-            "Prompt": prompt,
-            "Condition": condition,
-            "Avg Cosine Similarity": round(avg_similarity, 4),
-            "Num Samples": len(texts)
-        })
+# survey_scores.to_csv("survey_scores.csv", index=False)
 
-similarity_df = pd.DataFrame(similarity_results)
+survey_results = []
 
-print("\n=== Cosine Similarity Results ===")
-print(similarity_df)
+for construct in constructs.keys():
+    l1_col = f"{construct}_L1"
+    l2_col = f"{construct}_L2"
 
-similarity_df.to_csv("cosine_similarity_results.csv", index=False)
+    temp = survey_scores[[l1_col, l2_col]].dropna()
+
+    if len(temp) > 0:
+        res = paired_test(temp[l1_col], temp[l2_col])
+        res["metric"] = construct
+        survey_results.append(res)
+
+survey_results = pd.DataFrame(survey_results)
+#  survey_results.to_csv("survey_stats.csv", index=False)
+
+# =========================
+# 8. Integrated user-level file
+# =========================
+integrated = paired_behavior.merge(
+    survey_scores,
+    on="user_id",
+    how="left"
+)
+
+#  integrated.to_csv("integrated_final_analysis.csv", index=False)
+
+# =========================
+# 9. Plots (FINAL CLEAN VERSION)
+# =========================
+
+def paired_scatter(df, metric, title, filename):
+    l1 = df[f"{metric}_L1"]
+    l2 = df[f"{metric}_L2"]
+
+    plt.figure(figsize=(5,5))
+    plt.scatter(l1, l2)
+
+    # 对角线（关键）
+    max_val = max(max(l1), max(l2))
+    plt.plot([0, max_val], [0, max_val], linestyle='--')
+
+    plt.xlabel("L1 Native")
+    plt.ylabel("L2 English")
+    plt.title(title)
+
+    plt.tight_layout()
+    plt.savefig(filename, dpi=300)
+    plt.show()
+
+
+# =========================
+# ⭐ 只保留 3 个核心图
+# =========================
+
+# 1️⃣ Prompt Count（行为）
+paired_scatter(
+    paired_behavior,
+    "prompt_count",
+    "Prompt Count (Paired)",
+    "scatter_prompt_count.png"
+)
+
+# 2️⃣ Draft Words（输出）
+paired_scatter(
+    paired_behavior,
+    "draft_words",
+    "Draft Words (Paired)",
+    "scatter_draft_words.png"
+)
+
+# 3️⃣ Efficiency（主观体验）
+paired_scatter(
+    survey_scores,
+    "efficiency",
+    "Efficiency (Paired)",
+    "scatter_survey_efficiency.png"
+)
+# ⭐ 去掉 timezone（否则 Excel 会报错）
+task_df["start_time"] = task_df["start_time"].dt.tz_localize(None)
+task_df["end_time"] = task_df["end_time"].dt.tz_localize(None)
+# =========================
+# 🔟 EXPORT ALL TO ONE EXCEL
+# =========================
+
+output_file = "final_integrated_analysis.xlsx"
+
+with pd.ExcelWriter(output_file, engine="openpyxl") as writer:
+    
+    # 1️⃣ task-level（behavior + output）
+    task_df.to_excel(writer, sheet_name="task_level", index=False)
+    
+    # 2️⃣ paired behavior/output
+    paired_behavior.to_excel(writer, sheet_name="paired_behavior_output", index=False)
+    
+    # 3️⃣ behavior stats
+    behavior_results.to_excel(writer, sheet_name="behavior_stats", index=False)
+    
+    # 4️⃣ survey scores（每个人）
+    survey_scores.to_excel(writer, sheet_name="survey_scores", index=False)
+    
+    # 5️⃣ survey stats（t-test）
+    survey_results.to_excel(writer, sheet_name="survey_stats", index=False)
+    
+    # 6️⃣ integrated（最终整合）
+    integrated.to_excel(writer, sheet_name="integrated_final", index=False)
+
+print(f"\n✅ DONE! 所有结果已保存到：{output_file}")
