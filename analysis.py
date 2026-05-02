@@ -8,9 +8,9 @@ LOG_FILE = "output.csv"
 PART_FILE = "output_participants.csv"
 SURVEY_FILE = "AI_Ideation.xlsx"
 
-# =========================
+
 # 1. Read files
-# =========================
+
 logs = pd.read_csv(LOG_FILE)
 parts = pd.read_csv(PART_FILE)
 survey = pd.read_excel(SURVEY_FILE)
@@ -21,18 +21,18 @@ for df in [logs, parts, survey]:
 logs["user_id"] = logs["user_id"].astype(str)
 parts["user_id"] = parts["user_id"].astype(str)
 
-# =========================
+
 # 2. Clean participant output data
-# =========================
+
 parts = parts[
     parts["user_id"].notna()
     & (parts["user_id"].str.upper() != "N/A")
     & (parts["completed"] == 1)
 ].copy()
 
-# =========================
+
 # 3. Helper functions
-# =========================
+
 def count_words(text):
     if pd.isna(text):
         return 0
@@ -63,7 +63,7 @@ def has_tradeoff(text):
 
     text = str(text).lower()
 
-    # 强信号（明确 trade-off）
+    # 强信号
     strong_keywords = [
         # English
         "trade-off", "tradeoff", "limitation", "drawback", "downside", "risk", "cost",
@@ -78,7 +78,7 @@ def has_tradeoff(text):
         "hạn chế", "nhược điểm", "rủi ro"
     ]
 
-    # 弱信号（需要搭配使用）
+
     contrast_words = [
         "however", "but", "on the other hand",
         "但是", "然而",
@@ -86,13 +86,12 @@ def has_tradeoff(text):
         "tuy nhiên"
     ]
 
-    # 👉 规则1：有强信号直接算
+
     if any(k in text for k in strong_keywords):
         return 1
 
-    # 👉 规则2：弱信号 + 对比结构（更严格）
     if any(w in text for w in contrast_words):
-        # 简单结构判断（避免误判）
+
         if ("more" in text and "less" in text) or ("increase" in text and "decrease" in text):
             return 1
 
@@ -127,9 +126,8 @@ def paired_test(l1, l2):
 
     return result
 
-# =========================
-# 4. Behavior analysis from logs
-# =========================
+# Behavior analysis from logs
+
 logs["timestamp"] = pd.to_datetime(logs["timestamp"], errors="coerce")
 logs = logs.sort_values(["user_id", "timestamp", "id"]).copy()
 
@@ -180,9 +178,9 @@ else:
 
 behavior = behavior.fillna(0)
 
-# =========================
-# 5. Final draft output analysis
-# =========================
+
+# Final draft output analysis
+
 parts["draft_words"] = parts["final_draft"].apply(count_words)
 parts["draft_chars"] = parts["final_draft"].apply(count_chars)
 parts["solution_count"] = parts["final_draft"].apply(count_solutions)
@@ -202,9 +200,9 @@ task_df["condition"] = np.where(
 
 #task_df.to_excel("task_level_behavior_output.xswl", index=False)
 
-# =========================
-# 6. Paired L1 vs L2 behavior/output
-# =========================
+
+# Paired L1 vs L2 behavior/output
+
 metrics = [
     "prompt_count",
     "avg_prompt_words",
@@ -250,9 +248,8 @@ for m in metrics:
 behavior_results = pd.DataFrame(behavior_results)
 # behavior_results.to_csv("behavior_output_stats.csv", index=False)
 
-# =========================
-# 7. Survey analysis
-# =========================
+# Survey analysis
+
 survey = survey.rename(columns={"participant_id": "user_id"})
 survey["user_id"] = survey["user_id"].astype(str)
 
@@ -353,9 +350,9 @@ for construct in constructs.keys():
 survey_results = pd.DataFrame(survey_results)
 #  survey_results.to_csv("survey_stats.csv", index=False)
 
-# =========================
-# 8. Integrated user-level file
-# =========================
+
+# Integrated user-level file
+
 integrated = paired_behavior.merge(
     survey_scores,
     on="user_id",
@@ -364,9 +361,9 @@ integrated = paired_behavior.merge(
 
 #  integrated.to_csv("integrated_final_analysis.csv", index=False)
 
-# =========================
-# 9. Plots (FINAL CLEAN VERSION)
-# =========================
+
+# Plots 
+
 
 def paired_scatter(df, metric, title, filename):
     l1 = df[f"{metric}_L1"]
@@ -375,7 +372,7 @@ def paired_scatter(df, metric, title, filename):
     plt.figure(figsize=(5,5))
     plt.scatter(l1, l2)
 
-    # 对角线（关键）
+
     max_val = max(max(l1), max(l2))
     plt.plot([0, max_val], [0, max_val], linestyle='--')
 
@@ -388,11 +385,9 @@ def paired_scatter(df, metric, title, filename):
     plt.show()
 
 
-# =========================
-# ⭐ 只保留 3 个核心图
-# =========================
+# draft 
 
-# 1️⃣ Prompt Count（行为）
+# Prompt Count
 paired_scatter(
     paired_behavior,
     "prompt_count",
@@ -400,7 +395,7 @@ paired_scatter(
     "scatter_prompt_count.png"
 )
 
-# 2️⃣ Draft Words（输出）
+# Draft Words
 paired_scatter(
     paired_behavior,
     "draft_words",
@@ -408,40 +403,40 @@ paired_scatter(
     "scatter_draft_words.png"
 )
 
-# 3️⃣ Efficiency（主观体验）
+# Efficiency
 paired_scatter(
     survey_scores,
     "efficiency",
     "Efficiency (Paired)",
     "scatter_survey_efficiency.png"
 )
-# ⭐ 去掉 timezone（否则 Excel 会报错）
+
 task_df["start_time"] = task_df["start_time"].dt.tz_localize(None)
 task_df["end_time"] = task_df["end_time"].dt.tz_localize(None)
-# =========================
-# 🔟 EXPORT ALL TO ONE EXCEL
-# =========================
+
+
+# EXPORT ALL TO ONE EXCEL
+
 
 output_file = "final_integrated_analysis.xlsx"
 
 with pd.ExcelWriter(output_file, engine="openpyxl") as writer:
     
-    # 1️⃣ task-level（behavior + output）
+    #  task-level（behavior + output）
     task_df.to_excel(writer, sheet_name="task_level", index=False)
     
-    # 2️⃣ paired behavior/output
+    # paired behavior/output
     paired_behavior.to_excel(writer, sheet_name="paired_behavior_output", index=False)
     
-    # 3️⃣ behavior stats
+    # behavior stats
     behavior_results.to_excel(writer, sheet_name="behavior_stats", index=False)
     
-    # 4️⃣ survey scores（每个人）
+    # survey scores
     survey_scores.to_excel(writer, sheet_name="survey_scores", index=False)
     
-    # 5️⃣ survey stats（t-test）
+    # survey stats（t-test）
     survey_results.to_excel(writer, sheet_name="survey_stats", index=False)
     
-    # 6️⃣ integrated（最终整合）
+    # integrated
     integrated.to_excel(writer, sheet_name="integrated_final", index=False)
 
-print(f"\n✅ DONE! 所有结果已保存到：{output_file}")
