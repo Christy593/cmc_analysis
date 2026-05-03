@@ -5,20 +5,20 @@ import matplotlib.pyplot as plt
 from scipy.stats import ttest_rel, pearsonr
 import statsmodels.api as sm
 
-# ==============================
-# 1. Load Survey
-# ==============================
 
-FILE = "AI_Ideation_2.xlsx"   # ⚠️ 注意是 xlsx
+# 1. Load Survey
+
+
+FILE = "AI_Ideation_2.xlsx" 
 
 survey = pd.read_excel(FILE)
 
 # clean column names
 survey.columns = survey.columns.str.strip().str.lower()
 
-# ==============================
+
 # 2. Clean Data
-# ==============================
+
 
 survey = survey.rename(columns={"participant_id": "user_id"})
 survey["user_id"] = survey["user_id"].astype(str)
@@ -32,9 +32,9 @@ survey = survey[
 for col in survey.columns:
     survey[col] = pd.to_numeric(survey[col], errors="coerce")
 
-# ==============================
+
 # 3. Helper
-# ==============================
+
 
 def reverse_7(x):
     if pd.isna(x):
@@ -44,12 +44,8 @@ def reverse_7(x):
 def paired_t(l1, l2):
     return ttest_rel(l1, l2).pvalue
 
-# ==============================
-# 4. Extract Survey Dimensions
-# ==============================
 
-# ⚠️ 这里假设你用 Qualtrics 导出格式
-# 如果列名不一样，需要改
+# 4. Extract Survey Dimensions
 
 def extract_construct(df, prefix, reverse_items=[]):
     mapping = {
@@ -80,9 +76,7 @@ def extract_construct(df, prefix, reverse_items=[]):
 
     return l1_mean, l2_mean
 
-# ==============================
 # 5. Build Survey Scores
-# ==============================
 
 survey_scores = pd.DataFrame()
 survey_scores["user_id"] = survey["user_id"]
@@ -102,33 +96,26 @@ for name, cfg in constructs.items():
     survey_scores[f"{name}_L2"] = l2
     survey_scores[f"{name}_diff"] = l2 - l1
 
-# ==============================
-# 6. Proficiency（重点）
-# ==============================
 
-# ⚠️ 改列名！
+# 6. Proficiency（重点）
+
 if "years using english" in survey.columns:
     survey_scores["english_years"] = survey["years using english"]
 
-# ==============================
+
 # 7. AI Usage
-# ==============================
 
 if "how frequently do you use ai for help with writing assignments?" in survey.columns:
     survey_scores["ai_usage"] = survey[
         "how frequently do you use ai for help with writing assignments?"
     ]
 
-# ==============================
+
 # 8. Preference
-# ==============================
+
 
 if "overall_preference" in survey.columns:
     survey_scores["preference"] = survey["overall_preference"]
-
-# ==============================
-# 9. 1️⃣ L2是不是更好？（paired test）
-# ==============================
 
 print("\n=== L1 vs L2 Comparison ===")
 
@@ -144,9 +131,6 @@ for m in constructs.keys():
 
         print(f"{m}: diff(L2-L1)={diff:.2f}, p={p:.3f}")
 
-# ==============================
-# 10. 2️⃣ 为什么？（Regression）
-# ==============================
 
 print("\n=== Regression: proficiency ===")
 
@@ -164,9 +148,7 @@ if "english_years" in survey_scores.columns:
             print(f"\n--- {m} ---")
             print(model.summary())
 
-# ==============================
-# 11. 3️⃣ 哪个阶段用什么语言
-# ==============================
+
 
 print("\n=== Language Role Pattern ===")
 
@@ -174,9 +156,8 @@ for m in constructs.keys():
     diff = survey_scores[f"{m}_diff"].mean()
     print(f"{m}: L2 advantage = {diff:.2f}")
 
-# ==============================
-# 12. 4️⃣ 感觉 vs 感觉（Correlation）
-# ==============================
+
+
 
 print("\n=== Correlation between dimensions ===")
 
@@ -218,7 +199,7 @@ values = [
     for m in raw_metrics
 ]
 
-# 🎨 颜色逻辑：L1浅蓝 / L2深蓝
+
 colors = [
     "#A7D3F2" if v < 0 else "#1F77B4"
     for v in values
@@ -238,7 +219,6 @@ for i, v in enumerate(values):
              ha="center",
              fontsize=10)
 
-# L1 / L2 标签
 for i, v in enumerate(values):
     label = "L2" if v > 0 else "L1"
     plt.text(i, v/2,
@@ -268,10 +248,10 @@ r, p = pearsonr(x[mask], y[mask])
 
 plt.figure(figsize=(5,5))
 
-# 点（浅蓝）
+
 plt.scatter(x[mask], y[mask], color="#A7D3F2")
 
-# 回归线（深蓝）
+
 z = np.polyfit(x[mask], y[mask], 1)
 p_line = np.poly1d(z)
 
@@ -291,13 +271,13 @@ plt.figure(figsize=(5,4))
 
 diff = survey_scores["problem_understanding_diff"]
 
-# 浅蓝主体
+
 plt.hist(diff, bins=6, color="#A7D3F2", edgecolor="#1F77B4")
 
 # baseline
 plt.axvline(0, linestyle="--", color="#888888")
 
-# 平均线（深蓝）
+
 mean_val = diff.mean()
 plt.axvline(mean_val, linestyle=":", color="#1F77B4", linewidth=2)
 
