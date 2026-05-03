@@ -2,7 +2,7 @@ import sqlite3
 import pandas as pd
 
 # 连接数据库
-conn = sqlite3.connect("survey_local.db")
+conn = sqlite3.connect("survey_local_2.db")
 
 # 查看所有表
 cursor = conn.cursor()

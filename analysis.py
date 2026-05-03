@@ -6,7 +6,7 @@ from scipy.stats import ttest_rel, wilcoxon
 
 LOG_FILE = "output.csv"
 PART_FILE = "output_participants.csv"
-SURVEY_FILE = "AI_Ideation.xlsx"
+SURVEY_FILE = "AI_Ideation_2.xlsx"
 
 
 # 1. Read files
@@ -411,11 +411,17 @@ paired_scatter(
     "scatter_survey_efficiency.png"
 )
 
-task_df["start_time"] = task_df["start_time"].dt.tz_localize(None)
-task_df["end_time"] = task_df["end_time"].dt.tz_localize(None)
+for col in ["start_time", "end_time"]:
+    task_df[col] = task_df[col].astype(str)
+
+    task_df[col] = pd.to_datetime(task_df[col], errors="coerce")
+
+    try:
+        task_df[col] = task_df[col].dt.tz_localize(None)
+    except:
+        pass
 
 
-# EXPORT ALL TO ONE EXCEL
 
 
 output_file = "final_integrated_analysis.xlsx"
